@@ -16,13 +16,13 @@ def get_db(creds):
 
 def create_table(cursor):
   """function to create the table for bulk inserts"""
-  query = "CREATE TABLE User (id int PRIMARY KEY NOT NULL AUTO_INCREMENT, name varchar(50) NOT NULL)"
+  query = "CREATE TABLE bulk_queries_table (id int PRIMARY KEY NOT NULL AUTO_INCREMENT, field1 varchar(50) NOT NULL)"
 
   cursor.execute(query)
 
 def bulk_insert(cursor):
   """function doing performing the bulk inserts"""
-  query = "INSERT INTO User (name) VALUES (%s)"
+  query = "INSERT INTO bulk_queries_table (field1) VALUES (%s)"
   data = [(f"{uuid4()}",) for i in range(2000)]
 
   cursor.executemany(query, data)
@@ -33,7 +33,7 @@ def main():
   create_table(cur)
   bulk_insert(cur)
   db.commit()
-  cur.execute("SELECT * FROM User")
+  cur.execute("SELECT * FROM bulk_queries_table")
   cur.fetchall()
   print(cur.rowcount)
   # cur.execute("DROP TABLE User")
